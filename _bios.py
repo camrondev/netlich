@@ -8,7 +8,7 @@ class BIOS:
     """
     Handles POST, UI, and uIN.
     """
-    print("LD NL/BIOS/-->++")
+    print("INIT NL/BIOS")
     def __init__(self):
         ##= - - =##
         # SysVars #
@@ -20,7 +20,7 @@ class BIOS:
         self.BIOS_EXEC_FILE = __file__.replace(f"{__file__[0]}:", f"{self.SYS_DRIVE_CHAR}:")
         print("LD BIOS/BIOS_EXEC_FILE: BOOT.")
         
-        self.BIOS_ACS_FLAGS = ['-r', '-w']; print("LD BIOS/BIOS_ACS_FLAGS: PRM_FLAGS.")
+        self.BIOS_ACS_FLAGS = ['r', 'w']; print("LD BIOS/BIOS_ACS_FLAGS: RECOGNIZED FLAGS LIST.")
         self.BIOS_ACS_MAXLV = len(self.BIOS_ACS_FLAGS); print("LD BIOS/BIOS_ACS_MAXLV.")
 
         self.BIOS_CONTAINER = os.getcwd(); print("LD BIOS/BIOS_CONTAINER: WORKING DIRECTORY.")
@@ -49,9 +49,10 @@ class BIOS:
         
         ### BIOS Security & SecureUI Settings.
 
-        self.BIOS_SECUREUI_SHOWHOSTADDR = False; print("LD BIOS/BIOS_SECUREUI_SHOWHOSTADDR: ToggleHADDR. SecureUI.")
+        self.BIOS_SECUREUI_SHOWHOSTADDR     = False; print("LD BIOS/BIOS_SECUREUI_SHOWHOSTADDR: ToggleHADDR. SecureUI.")
         self.BIOS_SECUREUI_SHOWHOSTADDR_CLR = {True:  "\033[0m\033[4m",
                                                False: "\033[30m\033[4m"}; print("LD BIOS/BIOS_SECUREUI_SHOWHOSTADDR_CLR: CCx2 ESCAPE SEQ.: ToggleHADDR.")
+        self.BIOS_SECUREUI_PERMS_REQUESTED  = None; print("LD BIOS/BIOS_SECUREUI_PERMS_REQUESTED: AllowedACSFLAGSRequest. SecureUI.")
         
     ##= - - =##
     # Methods #
@@ -73,15 +74,17 @@ class BIOS:
     def request_useracslev(self, _flags: str = None) -> tuple[UserAccessLevel, list]:
         if not _flags:
             return 
-        
-        _iter, _deny = 0, []
+        self.BIOS_SECUREUI_PERMS_REQUESTED = _flags
+
+        _ual  = 0
+        _deny = []
         for _char in _flags:
             if _char in self.BIOS_ACS_FLAGS:
-                _iter += 1
-                continue
-            _deny.append(_char)
+                _ual += 1
+            else:
+                _deny.append(_char)
 
-        return (UserAccessLevel(_iter), _deny)
+        return (UserAccessLevel(_ual), _deny)
     
 
     def request_productversion(self) -> str:
@@ -94,11 +97,36 @@ class BIOS:
         _parse_misc = str(_base_n["ud/misc"]).replace(".", "")
 
         _string = f"{self.BIOS_VERSION}." \
-                 f"{_parse_bios}.{_parse_ui}." \
-                 f"{_parse_cmd}.{_parse_misc}"
+                  f"{_parse_bios}.{_parse_ui}." \
+                  f"{_parse_cmd}.{_parse_misc}"
         
         return _string
+    
 
+    def request_userinputcolor(self, _color: str = "r") -> str:
+        return self.BIOS_BSHCC(_color)
+    
+
+    def request_file_execname(self) -> str:
+        return self.BIOS_EXEC_FILE
+    
+    ## = = - - # # # # = = -
+    # SecureUI | Requests /
+    ## = = - - # # # # = = -
+    def sui_request_recvhaddrcolor(self) -> str:
+        return self.BIOS_SECUREUI_SHOWHOSTADDR_CLR \
+                   [self.BIOS_SECUREUI_SHOWHOSTADDR]
+    
+
+    def sui_request_recvpermissions_allow(self, _filter: str = None) -> str:
+        if _filter == None:
+            return self.BIOS_SECUREUI_PERMS_REQUESTED
+        
+        _filtered = self.BIOS_SECUREUI_PERMS_REQUESTED
+        for _char in _filter:
+            if _char in _filtered:
+                _filtered = _filtered.replace(_char, "")
+        return _filtered
 
     
     def err(self, _code: SystemErrorCode = 0):
