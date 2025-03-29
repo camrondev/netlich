@@ -25,8 +25,8 @@ class BIOS:
         self.BIOS_CONTAINER = os.getcwd()
         self.BIOS_VERSION   = "1.0"
         
-        self.BIOS_PRODUCT_VERSION = {"ud/bios": 0.1,
-                                     "ud/ui":   0.1,
+        self.BIOS_PRODUCT_VERSION = {"ud/bios": 0.2,
+                                     "ud/ui":   0.3,
                                      "ud/cmd":  0.0,
                                      "ud/misc": 0.1}
         
@@ -35,6 +35,7 @@ class BIOS:
         self.BIOS_LOADBSHCC = {"lpurple":"\033[95m",
                                "purple": "\033[35m",
                                "green":  "\033[32m",
+                               "lblue":  "\033[94m",
                                "blue":   "\033[34m",
                                "red":    "\033[31m",
                                "bold":   "\033[1m",
