@@ -50,6 +50,4 @@ class UserInterface(nl):
         _userinput = str(input(f"└{self.input_color}"))
 
 UI = UserInterface()
-
-while True:
-    UI.clisten()
+UI.clisten()

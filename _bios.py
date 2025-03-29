@@ -8,27 +8,28 @@ class BIOS:
     """
     Handles POST, UI, and uIN.
     """
-
+    print("LD NL/BIOS/-->++")
     def __init__(self):
         ##= - - =##
         # SysVars #
         ##= - - =##
-        self.SYS_DRIVE_CHAR = __file__[0].upper()
-        self.SYS_USER_PLATF = sys.platform.upper()
-        self.SYS_USER_HNAME = socket.gethostname()
-        self.SYS_USER_UIP   = socket.gethostbyname(self.SYS_USER_HNAME)
+        self.SYS_DRIVE_CHAR = __file__[0].upper(); print("LD BIOS/SYS_DRIVE_CHAR.")
+        self.SYS_USER_PLATF = sys.platform.upper(); print("LD BIOS/SYS_USER_PLATF: OS.")
+        self.SYS_USER_HNAME = socket.gethostname(); print("LD BIOS/SYS_USER_HNAME.")
+        self.SYS_USER_UIP   = socket.gethostbyname(self.SYS_USER_HNAME); print("LD BIOS/SYS_USER_UIP: HADDR.")
         self.BIOS_EXEC_FILE = __file__.replace(f"{__file__[0]}:", f"{self.SYS_DRIVE_CHAR}:")
+        print("LD BIOS/BIOS_EXEC_FILE: BOOT.")
         
-        self.BIOS_ACS_FLAGS = ['-r', '-w']
-        self.BIOS_ACS_MAXLV = len(self.BIOS_ACS_FLAGS)
+        self.BIOS_ACS_FLAGS = ['-r', '-w']; print("LD BIOS/BIOS_ACS_FLAGS: PRM_FLAGS.")
+        self.BIOS_ACS_MAXLV = len(self.BIOS_ACS_FLAGS); print("LD BIOS/BIOS_ACS_MAXLV.")
 
-        self.BIOS_CONTAINER = os.getcwd()
-        self.BIOS_VERSION   = "1.0"
+        self.BIOS_CONTAINER = os.getcwd(); print("LD BIOS/BIOS_CONTAINER: WORKING DIRECTORY.")
+        self.BIOS_VERSION   = "1.0"; print("LD BIOS/BIOS_VERSION: APP VERSION.")
         
         self.BIOS_PRODUCT_VERSION = {"ud/bios": 0.2,
                                      "ud/ui":   0.3,
                                      "ud/cmd":  0.0,
-                                     "ud/misc": 0.1}
+                                     "ud/misc": 0.1}; print("LD BIOS/BIOS_PRODUCT_VERSION: /BI/UI/CM/MISC..")
         
         ### Load permitted BASH COLORCODE list.
 
@@ -40,17 +41,17 @@ class BIOS:
                                "red":    "\033[31m",
                                "bold":   "\033[1m",
                                "italic": "\033[3m",
-                               "r":      "\033[0m"}
+                               "r":      "\033[0m"}; print("LD BIOS/BIOS_LOADBSHCC: NETLICH/BASH CCx9 ESCAPE SEQ..")
         
         self.BIOS_BSHCC     = lambda _color: \
-            self.BIOS_LOADBSHCC[_color]
+            self.BIOS_LOADBSHCC[_color]; print("LD BIOS/BIOS_BSHCC: CCx9 ESCAPE SEQ. CALL.")
         
         
         ### BIOS Security & SecureUI Settings.
 
-        self.BIOS_SECUREUI_SHOWHOSTADDR = False
+        self.BIOS_SECUREUI_SHOWHOSTADDR = False; print("LD BIOS/BIOS_SECUREUI_SHOWHOSTADDR: ToggleHADDR. SecureUI.")
         self.BIOS_SECUREUI_SHOWHOSTADDR_CLR = {True:  "\033[0m\033[4m",
-                                               False: "\033[30m\033[4m"}
+                                               False: "\033[30m\033[4m"}; print("LD BIOS/BIOS_SECUREUI_SHOWHOSTADDR_CLR: CCx2 ESCAPE SEQ.: ToggleHADDR.")
         
     ##= - - =##
     # Methods #
