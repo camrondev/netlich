@@ -1,35 +1,37 @@
-import os, sys, socket
+import os, sys, socket, _post_log as _post
 from typing import NewType
-#▒ ° ± ┘ ┐ ┌ └ ┼ ─ ├ ┤ ┴ ┬ │ ≤ ≥ · ♦ ≠ π £
+#▒ ° ± ┘ ┐ ┌ └ ┼ ─ ├ ┤ ┴ ┬ │ ≤ ≥ · ♦ ≠ π £│┘ ┐ ┌ └
 UserAccessLevel = NewType("UserAccessLevel", int)
 SystemErrorCode = NewType("SystemErrorCode", int)
+
+TO_POST = lambda _loadedvar: _post.lg(f"BIOS/{_loadedvar}")
 
 class BIOS:
     """
     Handles POST, UI, and uIN.
     """
-    print("INIT NL/BIOS")
+    _post.lg("INIT NL/BIOS")
     def __init__(self):
         ##= - - =##
         # SysVars #
         ##= - - =##
-        self.SYS_DRIVE_CHAR = __file__[0].upper(); print("LD BIOS/SYS_DRIVE_CHAR.")
-        self.SYS_USER_PLATF = sys.platform.upper(); print("LD BIOS/SYS_USER_PLATF.")
-        self.SYS_USER_HNAME = socket.gethostname(); print("LD BIOS/SYS_USER_HNAME.")
-        self.SYS_USER_UIP   = socket.gethostbyname(self.SYS_USER_HNAME); print("LD BIOS/SYS_USER_UIP.")
+        self.SYS_DRIVE_CHAR = __file__[0].upper();                                          TO_POST("SYS_DRIVE_CHAR")
+        self.SYS_USER_PLATF = sys.platform.upper();                                         TO_POST("SYS_USER_PLATF")
+        self.SYS_USER_HNAME = socket.gethostname();                                         TO_POST("SYS_USER_HNAME")
+        self.SYS_USER_HADDR   = socket.gethostbyname(self.SYS_USER_HNAME);                  TO_POST("SYS_USER_HADDR")
         self.BIOS_EXEC_FILE = __file__.replace(f"{__file__[0]}:", f"{self.SYS_DRIVE_CHAR}:")
-        print("LD BIOS/BIOS_EXEC_FILE.")
+        TO_POST("BIOS_EXEC_FILE")
         
-        self.BIOS_ACS_FLAGS = ['r', 'w']; print("LD BIOS/BIOS_ACS_FLAGS.")
-        self.BIOS_ACS_MAXLV = len(self.BIOS_ACS_FLAGS); print("LD BIOS/BIOS_ACS_MAXLV.")
+        self.BIOS_ACS_FLAGS = ['r', 'w'];                                                   TO_POST("BIOS_ACS_FLAGS")
+        self.BIOS_ACS_MAXLV = len(self.BIOS_ACS_FLAGS);                                     TO_POST("BIOS_ACS_MAXLV")
 
-        self.BIOS_CONTAINER = os.getcwd(); print("LD BIOS/BIOS_CONTAINER.")
-        self.BIOS_VERSION   = "1.0"; print("LD BIOS/BIOS_VERSION.")
+        self.BIOS_CONTAINER = os.getcwd();                                                  TO_POST("BIOS_CONTAINER")
+        self.BIOS_VERSION   = "1.0";                                                        TO_POST("BIOS_VERSION")
         
-        self.BIOS_PRODUCT_VERSION = {"ud/bios": 0.2,
-                                     "ud/ui":   0.3,
+        self.BIOS_PRODUCT_VERSION = {"ud/bios": 0.4,
+                                     "ud/ui":   0.6,
                                      "ud/cmd":  0.0,
-                                     "ud/misc": 0.1}; print("LD BIOS/BIOS_PRODUCT_VERSION.")
+                                     "ud/misc": 0.3};                                       TO_POST("BIOS_PRODUCT_VERSION")
         
         ### Load permitted BASH COLORCODE list.
 
@@ -41,18 +43,18 @@ class BIOS:
                                "red":    "\033[31m",
                                "bold":   "\033[1m",
                                "italic": "\033[3m",
-                               "r":      "\033[0m"}; print("LD BIOS/BIOS_LOADBSHCC.")
+                               "r":      "\033[0m"};                                        TO_POST("BIOS_LOADBSHCC")
         
         self.BIOS_BSHCC     = lambda _color: \
-            self.BIOS_LOADBSHCC[_color]; print("LD BIOS/BIOS_BSHCC.")
+            self.BIOS_LOADBSHCC[_color];                                                    TO_POST("BIOS_BSHCC")
         
         
         ### BIOS Security & SecureUI Settings.
 
-        self.BIOS_SECUREUI_SHOWHOSTADDR     = False; print("LD BIOS/BIOS_SECUREUI_SHOWHOSTADDR.")
+        self.BIOS_SECUREUI_SHOWHOSTADDR     = True;                                        TO_POST("BIOS_SECUREUI_SHOWHOSTADDR")
         self.BIOS_SECUREUI_SHOWHOSTADDR_CLR = {True:  "\033[0m\033[4m",
-                                               False: "\033[30m\033[4m"}; print("LD BIOS/BIOS_SECUREUI_SHOWHOSTADDR_CLR.")
-        self.BIOS_SECUREUI_PERMS_REQUESTED  = None; print("LD BIOS/BIOS_SECUREUI_PERMS_REQUESTED.")
+                                               False: "\033[30m\033[4m"};                   TO_POST("BIOS_SECUREUI_SHOWHOSTADDR_CLR")
+        self.BIOS_SECUREUI_PERMS_REQUESTED  = None;                                         TO_POST("BIOS_SECUREUI_PERMS_REQUESTED")
         
     ##= - - =##
     # Methods #
