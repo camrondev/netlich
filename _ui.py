@@ -6,12 +6,12 @@ class UserInterface(nl):
 
 
     def __init__(self):
-        super().__init__(); print("INIT BIOS/UserInterface")
+        super().__init__(); print("INIT NL/BIOS/UserInterface")
         os.system(f"title master% netlich [{self.BIOS_CONTAINER}]")
 
         self.input_color = self.request_userinputcolor("r"); print("LD BIOS/UserInterface/input_color.")
-        self.haddr_color = self.sui_request_recvhaddrcolor(); print("LD BIOS/UserInterface/haddr_color: ToggleHADDR. SecureUI.")
-        self.access      = self.request_useracslev("niggaswitnomoney-real"); print("LD BIOS/UserInterface/access: ACSLEV, PRM, ACSFLAGS.")
+        self.haddr_color = self.sui_request_recvhaddrcolor(); print("LD BIOS/UserInterface/haddr_color.")
+        self.access      = self.request_useracslev("niggaswitnomoney-real"); print("LD BIOS/UserInterface/access.")
         
 
         if self.access == None:
@@ -20,7 +20,7 @@ class UserInterface(nl):
             os.system("pause")
             _b.sys.exit()
         else:
-            self.access_n_1  = str(); print("LD BIOS/UserInterface/access_n_1: EXPRESSED FLAGS DENIED.")
+            self.access_n_1  = str(); print("LD BIOS/UserInterface/access_n_1.")
             for _item in self.access[1]:
                 self.access_n_1 = f"{self.access_n_1}{_item}"
 
