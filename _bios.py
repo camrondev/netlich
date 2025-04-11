@@ -29,7 +29,7 @@ class BIOS:
         self.BIOS_CONTAINER = os.getcwd();                                                  TO_POST("BIOS_CONTAINER")
         self.BIOS_VERSION   = "1.0";                                                        TO_POST("BIOS_VERSION")
         
-        self.BIOS_PRODUCT_VERSION = {"ud/bios": 0.6,
+        self.BIOS_PRODUCT_VERSION = {"ud/bios": 0.7,
                                      "ud/ui":   1.0,
                                      "ud/cmd":  0.0,
                                      "ud/misc": 2.1};                                       TO_POST("BIOS_PRODUCT_VERSION")
