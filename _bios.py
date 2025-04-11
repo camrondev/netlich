@@ -32,10 +32,10 @@ class BIOS:
         self.BIOS_CONTAINER = os.getcwd();                                                  TO_POST("BIOS_CONTAINER")
         self.BIOS_VERSION   = "1.0";                                                        TO_POST("BIOS_VERSION")
         
-        self.BIOS_PRODUCT_VERSION = {"ud/bios": 0.7,
-                                     "ud/ui":   1.0,
+        self.BIOS_PRODUCT_VERSION = {"ud/bios": 1.0,
+                                     "ud/ui":   1.1,
                                      "ud/cmd":  0.0,
-                                     "ud/misc": 2.1};                                       TO_POST("BIOS_PRODUCT_VERSION")
+                                     "ud/misc": 2.3};                                       TO_POST("BIOS_PRODUCT_VERSION")
         self.BIOS_ERR_CLIST = {SystemErrorCode(0): "ERR_INSTANCE_NOT_FOUND"};               TO_POST("BIOS_ERR_CLIST")
         self.BIOS_LISTPLATF = {"win32": "WIN32",
                                "linux": "LINUX",
@@ -221,7 +221,7 @@ class BIOS:
             self.notification(f"Creating META folder @ {self.BIOS_BSHCC("r")}" \
                               f"{_container}{self.BIOS_BSHCC('green')}\\[meta]", NFInfo)
             os.mkdir(f"{_container}\\meta")
-            
+
 
     
     def err(self, _code: SystemErrorCode = 0) -> str:
