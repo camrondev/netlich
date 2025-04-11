@@ -78,6 +78,9 @@ class UserInterface(NL):
 
         _widget = self.ui_getwidget("network_status")
         _direct = ...
+
+        self.sui_generate_env()
+
         self.prnt(f"{self.ui_s_botRi}{self.ui_c_lightpurple}netlich{self.ui_c_lightblue}({self.ui_c_green}{_direct}{self.ui_c_lightblue}){_widget}")
         _uin = str(input(f"{self.ui_s_topRi}{self.input_color}"))
         

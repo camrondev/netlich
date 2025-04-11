@@ -61,6 +61,10 @@ class BIOS:
         
         self.BIOS_LISTWIDGET_ID = {"network_status": self.request_netty()};                 TO_POST("BIOS_LISTWIDGET_ID")
         
+        self.BIOS_LISTNOTIFICATION_TYPE = {"info": f"{self.BIOS_BSHCC("lblue")}(?)",
+                                           "warn": f"{self.BIOS_BSHCC("lred")}(!)",
+                                           "ui":   f"{self.BIOS_BSHCC("gray")}(×)"}
+        
         
         ### BIOS Security & SecureUI Settings.
 
@@ -87,6 +91,35 @@ class BIOS:
     def prnterr(self, _code: SystemErrorCode = 0) -> callable:
         return self.prnt(f"{self.request_errstring(self.err(_code))}", "lred")
     
+
+    def notification(self, _message: str = "No message.", _type: str = None) -> None:
+        if _type == None:
+            _type = "ui"
+        
+        try:
+            self.prnt(f"{self.BIOS_LISTNOTIFICATION_TYPE[_type]} {_message}")
+        except KeyError:
+            return
+        
+    
+    def list_to_string(self, _target_list: list = None, _fileformat: bool = False) -> str:
+        if _target_list == None:
+            return 
+        if not isinstance(_target_list[0], str):
+            return
+        
+        _value = ""
+        if _fileformat:
+            for _item in _target_list:
+                for _char in _item:
+                    _value = f"{_value}{_char}"
+                _value = f"{_value}\\"
+        else:
+            for _item in _target_list:
+                for _char in _item:
+                    _value = f"{_value}{_char}"
+        return _value
+
 
     def title(self, _string: str = None) -> None:
         if _string == None:
@@ -174,6 +207,17 @@ class BIOS:
             if _char in _filtered:
                 _filtered = _filtered.replace(_char, "")
         return _filtered
+    
+
+    def sui_generate_env(self) -> None:
+        _split_container = self.BIOS_CONTAINER.split("\\")
+        _spcon_clone     = _split_container; _spcon_clone.pop()
+        _split_cont_len  = len(_split_container)
+        _container       = _split_container[_split_cont_len - 1]
+        _container_direct= self.list_to_string(_spcon_clone, True)
+        if not _container == "netlich":
+            self.notification(f"Unexpected '\\{_container}', aliasing to '\\netlich'")
+            os.rename(self.BIOS_CONTAINER, _container_direct + "\\netlich")
 
     
     def err(self, _code: SystemErrorCode = 0) -> str:
