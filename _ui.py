@@ -72,7 +72,7 @@ class UserInterface(NL):
 
     # │┘ ┐ ┌ └─
     def ui_listen_uin(self):
-        os.system("pause")
+        #os.system("pause")
         os.system("cls")
         self.ui_display_header()
 
@@ -87,4 +87,6 @@ class UserInterface(NL):
 
 
 UI = UserInterface()
-UI.ui_listen_uin()
+
+while True:
+    UI.ui_listen_uin()

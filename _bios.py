@@ -4,6 +4,9 @@ from typing import NewType
 
 UserAccessLevel = NewType("UserAccessLevel", int)
 SystemErrorCode = NewType("SystemErrorCode", int)
+NFInfo          = NewType("NFInfo", str)
+NFWarn          = NewType("NFWarn", str)
+NFUI            = NewType("NFUI", str)
 
 TO_POST = lambda _loadedvar: _post.lg(f"BIOS/{_loadedvar}")
 
@@ -61,9 +64,9 @@ class BIOS:
         
         self.BIOS_LISTWIDGET_ID = {"network_status": self.request_netty()};                 TO_POST("BIOS_LISTWIDGET_ID")
         
-        self.BIOS_LISTNOTIFICATION_TYPE = {"info": f"{self.BIOS_BSHCC("lblue")}(?)",
-                                           "warn": f"{self.BIOS_BSHCC("lred")}(!)",
-                                           "ui":   f"{self.BIOS_BSHCC("gray")}(×)"}
+        self.BIOS_LISTNOTIFICATION_TYPE = {NFInfo: f"{self.BIOS_BSHCC("lblue")}(?)",
+                                           NFWarn: f"{self.BIOS_BSHCC("lred")}(!)",
+                                           NFUI:   f"{self.BIOS_BSHCC("gray")}(×)"}
         
         
         ### BIOS Security & SecureUI Settings.
@@ -92,17 +95,19 @@ class BIOS:
         return self.prnt(f"{self.request_errstring(self.err(_code))}", "lred")
     
 
-    def notification(self, _message: str = "No message.", _type: str = None) -> None:
+    def notification(self, _message: str = "No message.", _type = None) -> None:
         if _type == None:
-            _type = "ui"
+            _type = NFUI
         
         try:
+            if not _type in self.BIOS_LISTNOTIFICATION_TYPE:
+                raise KeyError("Invalid notification type.")
             self.prnt(f"{self.BIOS_LISTNOTIFICATION_TYPE[_type]} {_message}")
         except KeyError:
             return
         
     
-    def list_to_string(self, _target_list: list = None, _fileformat: bool = False) -> str:
+    def list_to_string(self, _target_list: list = None, _fileformat: bool = False) -> str: #for string -> string.split -> string
         if _target_list == None:
             return 
         if not isinstance(_target_list[0], str):
@@ -210,14 +215,13 @@ class BIOS:
     
 
     def sui_generate_env(self) -> None:
-        _split_container = self.BIOS_CONTAINER.split("\\")
-        _spcon_clone     = _split_container; _spcon_clone.pop()
-        _split_cont_len  = len(_split_container)
-        _container       = _split_container[_split_cont_len - 1]
-        _container_direct= self.list_to_string(_spcon_clone, True)
-        if not _container == "netlich":
-            self.notification(f"Unexpected '\\{_container}', aliasing to '\\netlich'")
-            os.rename(self.BIOS_CONTAINER, _container_direct + "\\netlich")
+        _container = self.BIOS_CONTAINER
+        if not os.path.exists(_container + "\\meta"):
+            self.notification("An error occurred referencing \\meta.", NFInfo)
+            self.notification(f"Creating META folder @ {self.BIOS_BSHCC("r")}" \
+                              f"{_container}{self.BIOS_BSHCC('green')}\\[meta]", NFInfo)
+            os.mkdir(f"{_container}\\meta")
+            
 
     
     def err(self, _code: SystemErrorCode = 0) -> str:
@@ -226,3 +230,4 @@ class BIOS:
                 return self.BIOS_ERR_CLIST[SystemErrorCode(_code)]
             continue
         return "ERR_0"
+    
