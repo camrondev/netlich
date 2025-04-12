@@ -32,7 +32,7 @@ class BIOS:
         self.BIOS_CONTAINER = os.getcwd();                                                  TO_POST("BIOS_CONTAINER")
         self.BIOS_VERSION   = "1.0";                                                        TO_POST("BIOS_VERSION")
         
-        self.BIOS_PRODUCT_VERSION = {"ud/bios": 1.0,
+        self.BIOS_PRODUCT_VERSION = {"ud/bios": 1.1,
                                      "ud/ui":   1.1,
                                      "ud/cmd":  0.0,
                                      "ud/misc": 2.3};                                       TO_POST("BIOS_PRODUCT_VERSION")
@@ -71,10 +71,11 @@ class BIOS:
         
         ### BIOS Security & SecureUI Settings.
 
-        self.BIOS_SECUREUI_SHOWHOSTADDR     = False;                                         TO_POST("BIOS_SECUREUI_SHOWHOSTADDR")
+        self.BIOS_SECUREUI_SHOWHOSTADDR     = False;                                        TO_POST("BIOS_SECUREUI_SHOWHOSTADDR")
         self.BIOS_SECUREUI_SHOWHOSTADDR_CLR = {True:  "\033[0m\033[4m",
                                                False: "\033[30m\033[4m"};                   TO_POST("BIOS_SECUREUI_SHOWHOSTADDR_CLR")
         self.BIOS_SECUREUI_PERMS_REQUESTED  = None;                                         TO_POST("BIOS_SECUREUI_PERMS_REQUESTED")
+        self.BIOS_SECUREUI_INSTANCE_FORMAT  = {};                                           TO_POST("BIOS_SECUREUI_INSTANCE_FORMAT")
         
     ##= - - =##
     # Methods #
@@ -92,7 +93,7 @@ class BIOS:
 
 
     def prnterr(self, _code: SystemErrorCode = 0) -> callable:
-        return self.prnt(f"{self.request_errstring(self.err(_code))}", "lred")
+        return self.notification(f"{self.request_errstring(self.err(_code))}", NFWarn)
     
 
     def notification(self, _message: str = "No message.", _type = None) -> None:
