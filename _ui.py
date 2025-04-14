@@ -62,10 +62,11 @@ class UserInterface(NL):
                 _hosthidden = "visible"
                 _hnamecolor = "\033[90m"
 
-        _uidh_top = f" ┳┓ ┏┓ ┏┳┓ \033[95m┓ ┳┏┓┓┏ │{_}NLBuild {self.request_productversion()} © camrondev @" \
+
+        _uidh_top = f" ╔╗╔ ╔═╗ ╔╦╗ \033[95m╦  ╦╔═╗╦ ╦ │{_}NLBuild {self.request_productversion()} © camrondev @" \
                                                     f"{self.ui_c_gray}fws --creator"
-        _uidh_mid = f" ┃┃ ┣   ┃  \033[95m┃ ┃┃ ┣┫ │{_}"
-        _uidh_bot = f" ┛┗ ┗┛  ┻  \033[95m┗┛┻┗┛┛┗ │{_}"
+        _uidh_mid = f" ║║║ ║╣   ║  \033[95m║  ║║  ╠═╣ │{_}"
+        _uidh_bot = f" ╝╚╝ ╚═╝  ╩  \033[95m╩═╝╩╚═╝╩ ╩ │{_}"
 
         self.prntlines({_uidh_top: "r", _uidh_mid: "r", _uidh_bot: "r"})
 
