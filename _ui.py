@@ -16,8 +16,8 @@ class UserInterface(NL):
         self.widget_bar  = []
 
         if _source == None:
-            _source = "main"
-        self.ui_instance = _source;                          TO_POST("ui_instance")
+            _source = list(self.BIOS_SECUREUI_INSTANCE_FORMAT.keys())[0]
+        self.ui_instance = _source;                         TO_POST("ui_instance")
 
         self.ui_c_lightpurple = self.BIOS_BSHCC("lpurple"); TO_POST("ui_c_lightpurple")
         self.ui_c_purple      = self.BIOS_BSHCC("purple");  TO_POST("ui_c_purple")
@@ -37,10 +37,9 @@ class UserInterface(NL):
         self.ui_s_topRi       = "└";                        TO_POST("ui_s_topRi")
         self.ui_s_topLe       = "┘";                        TO_POST("ui_s_topLe")
 
-        #CHECK NL NETWORK STATUS
-
         _b._post.flash()
-        self.prnt("notice: \033[32mApplication successfully loaded.")  # POST/LOG Endpoint, User-accessible UI after this point.
+        self.prnt("\033[32mApplication successfully loaded.")  # POST/LOG Endpoint, User-accessible UI after this point.
+
 
     def ui_getwidget(self, _widget_id: str = None):
         if _widget_id == None:
@@ -71,16 +70,13 @@ class UserInterface(NL):
         self.prntlines({_uidh_top: "r", _uidh_mid: "r", _uidh_bot: "r"})
 
 
-    # │┘ ┐ ┌ └─
     def ui_listen_uin(self):
-        #os.system("pause")
+        os.system("pause")
         os.system("cls")
         self.ui_display_header()
 
         _widget = self.ui_getwidget("network_status")
         _direct = ...
-
-        self.sui_generate_env()
 
         self.prnt(f"{self.ui_s_botRi}{self.ui_c_lightpurple}netlich{self.ui_c_lightblue}({self.ui_c_green}{_direct}{self.ui_c_lightblue}){_widget}")
         _uin = str(input(f"{self.ui_s_topRi}{self.input_color}"))

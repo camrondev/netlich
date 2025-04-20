@@ -1,4 +1,4 @@
-import os, sys, socket, _post_log as _post, traceback, functools
+import os, sys, socket, json, _post_log as _post, traceback, functools
 from typing import NewType
 #▒ ° ± ┘ ┐ ┌ └ ┼ ─ ├ ┤ ┴ ┬ │ ≤ ≥ · ♦ ≠ π £│┘ ┐ ┌ └
 
@@ -34,12 +34,14 @@ class BIOS:
         self.BIOS_VERSION   = "1.0";                                                        TO_POST("BIOS_VERSION")
         
         self.BIOS_PRODUCT_VERSION = \
-            {"ud/bios": 1.1,
-             "ud/ui":   1.1,
+            {"ud/bios": 1.5,
+             "ud/ui":   1.2,
              "ud/cmd":  0.0,
-             "ud/misc": 2.3};                                                               TO_POST("BIOS_PRODUCT_VERSION")
+             "ud/misc": 3.0};                                                               TO_POST("BIOS_PRODUCT_VERSION")
         self.BIOS_ERR_CLIST = \
-            {SystemErrorCode(0): "ERR_INSTANCE_NOT_FOUND"};                                 TO_POST("BIOS_ERR_CLIST")
+            {SystemErrorCode(0): "ERR_0",
+             SystemErrorCode(1): "ERR_INSTANCE_NOT_FOUND",
+             SystemErrorCode(2): "ERR_INSTANCE_CONFIG_NA"};                                 TO_POST("BIOS_ERR_CLIST")
         self.BIOS_LISTPLATF = \
             {"win32": "WIN32",
              "linux": "LINUX",
@@ -48,7 +50,8 @@ class BIOS:
              "cli":   "COLIN"};                                                             TO_POST("BIOS_LISTPLATF")
         self.BIOS_LISTERROR = \
             {"ERR_0": "Could not parse SEC, 0.",
-             "ERR_INSTANCE_NOT_FOUND": "Unable to verify a local NL Network."};             TO_POST("BIOS_LISTERROR")
+             "ERR_INSTANCE_NOT_FOUND": "Unable to verify a local NL Network.",
+             "ERR_INSTANCE_CONFIG_NA": "Could not locate instance config."};             TO_POST("BIOS_LISTERROR")
 
         self.BIOS_LOADBSHCC = \
             {"lpurple":"\033[95m",
@@ -83,7 +86,11 @@ class BIOS:
              False: "\033[30m\033[4m"};                                                     TO_POST("BIOS_SECUREUI_SHOWHOSTADDR_CLR")
         self.BIOS_SECUREUI_PERMS_REQUESTED  = None;                                         TO_POST("BIOS_SECUREUI_PERMS_REQUESTED")
         self.BIOS_SECUREUI_INSTANCE_FORMAT  = \
-            {"p/netlich_main": NLProcess};                                                  TO_POST("BIOS_SECUREUI_INSTANCE_FORMAT")
+            {"os/nl": NLProcess};                                                  TO_POST("BIOS_SECUREUI_INSTANCE_FORMAT")
+        self.BIOS_SECUREUI_META_INST    = \
+            f"{self.sui_generate_env()}\\inst.json"
+        with open(self.BIOS_SECUREUI_META_INST, "r") as iconfig:
+            self.BIOS_SECUREUI_ICONFIG_CONTENT = iconfig.read();                            TO_POST("BIOS_SECUREUI_ICONFIG_CONTENT")
         
 
     ##= - - =##
@@ -103,7 +110,7 @@ class BIOS:
         Print multiple lines of messages to the screen.
         """
         if not _lines:
-            return
+            return 
         
         for _line in _lines:
             self.prnt(_line, _lines[_line])
@@ -131,10 +138,10 @@ class BIOS:
             self.prnt(f"{self.BIOS_LISTNOTIFICATION_TYPE[_type]} {_message}")
 
         except KeyError:
-            return
+            return 
         
     
-    def list_to_string(self, _target_list: list = None, _fileformat: bool = False) -> str: #for string -> string.split -> string
+    def list_to_string(self, _target_list: list = None, _fileformat: bool = False) -> str:
         """
         Combines a list of strings.\n
         *Includes whitespace.*
@@ -142,7 +149,7 @@ class BIOS:
         if _target_list == None:
             return 
         if not isinstance(_target_list[0], str):
-            return
+            return 
         
         _value = ""
         if _fileformat:
@@ -165,7 +172,7 @@ class BIOS:
         Set the title of the window.
         """
         if _string == None:
-            return
+            return 
 
         os.system(f"title {_string}/net")
 
@@ -266,11 +273,13 @@ class BIOS:
 
 
     def sui_request_recvhaddrcolor(self) -> str:
+
         return self.BIOS_SECUREUI_SHOWHOSTADDR_CLR \
                    [self.BIOS_SECUREUI_SHOWHOSTADDR]
     
 
     def sui_request_recvpermissions_allow(self, _filter: str = None) -> str:
+
         if _filter == None:
             return self.BIOS_SECUREUI_PERMS_REQUESTED
         
@@ -283,16 +292,54 @@ class BIOS:
         return _filtered
     
 
-    def sui_generate_env(self) -> None:
+    def sui_request_ud_iconfig(self, _new_config: str = None):
+        if _new_config == None:
+            return 
+        try:
+            with open(self.BIOS_SECUREUI_META_INST, "w+") as _config:
+                _config.write(str(_new_config).replace("'", '"'))
+        except FileNotFoundError:
+            self.prnterr(SystemErrorCode(2))
+            self.sui_generate_env()
+    
+
+    def sui_request_fcontent(self, _file: str = f"", _dictformat: bool = False):
+        _content = ""
+        try:
+            with open(f"{_file}", "r") as _f:
+                _content = _f.read()
+        except FileNotFoundError:
+            self.notification(f"fcontent: Couldn't locate: \"{_file}\", scope \"{self.BIOS_CONTAINER}\"", NFWarn)
+            return
+        
+        try:
+            if _dictformat:
+                return dict(_content)
+
+            return _content
+        except UnboundLocalError:
+            pass
+
+
+    def sui_generate_env(self) -> str:
+
         _container = self.BIOS_CONTAINER
         if not os.path.exists(_container + "\\meta"):
-            self.notification("An error occurred referencing \\meta.", NFInfo)
-            self.notification(f"Creating META folder @ {self.BIOS_BSHCC("r")}" \
-                              f"{_container}{self.BIOS_BSHCC('green')}\\[meta]", NFInfo)
-            os.mkdir(f"{_container}\\meta")
+            _post.lg("ERR UNABLE TO LOCATE \\meta")
+            os.mkdir(f"{_container}\\meta"); _post.lg(f"FIX META REPAIRED AT \"{_container}\\meta\"")
+
+        try:
+            with open(f"{_container}\\meta\\inst.json", "w+") as instance_config:
+                instance_config.write(str(self.BIOS_SECUREUI_INSTANCE_FORMAT).replace("'", "\""))
+
+        except FileExistsError:
+            pass
+
+        return f"{_container}\\meta"
 
     
     def err(self, _code: SystemErrorCode = 0) -> str:
+
         for _identifier in self.BIOS_ERR_CLIST:
             if _code == _identifier:
 
