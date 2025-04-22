@@ -34,10 +34,10 @@ class BIOS:
         self.BIOS_VERSION   = "1.0";                                                        TO_POST("BIOS_VERSION")
         
         self.BIOS_PRODUCT_VERSION = \
-            {"ud/bios": 1.5,
-             "ud/ui":   1.2,
+            {"ud/bios": 1.7,
+             "ud/ui":   1.5,
              "ud/cmd":  0.0,
-             "ud/misc": 3.0};                                                               TO_POST("BIOS_PRODUCT_VERSION")
+             "ud/misc": 4.5};                                                               TO_POST("BIOS_PRODUCT_VERSION")
         self.BIOS_ERR_CLIST = \
             {SystemErrorCode(0): "ERR_0",
              SystemErrorCode(1): "ERR_INSTANCE_NOT_FOUND",
@@ -51,7 +51,7 @@ class BIOS:
         self.BIOS_LISTERROR = \
             {"ERR_0": "Could not parse SEC, 0.",
              "ERR_INSTANCE_NOT_FOUND": "Unable to verify a local NL Network.",
-             "ERR_INSTANCE_CONFIG_NA": "Could not locate instance config."};             TO_POST("BIOS_LISTERROR")
+             "ERR_INSTANCE_CONFIG_NA": "Could not locate instance config."};                TO_POST("BIOS_LISTERROR")
 
         self.BIOS_LOADBSHCC = \
             {"lpurple":"\033[95m",
@@ -86,7 +86,7 @@ class BIOS:
              False: "\033[30m\033[4m"};                                                     TO_POST("BIOS_SECUREUI_SHOWHOSTADDR_CLR")
         self.BIOS_SECUREUI_PERMS_REQUESTED  = None;                                         TO_POST("BIOS_SECUREUI_PERMS_REQUESTED")
         self.BIOS_SECUREUI_INSTANCE_FORMAT  = \
-            {"os/nl": NLProcess};                                                  TO_POST("BIOS_SECUREUI_INSTANCE_FORMAT")
+            {"os/nl": NLProcess};                                                           TO_POST("BIOS_SECUREUI_INSTANCE_FORMAT")
         self.BIOS_SECUREUI_META_INST    = \
             f"{self.sui_generate_env()}\\inst.json"
         with open(self.BIOS_SECUREUI_META_INST, "r") as iconfig:
@@ -299,7 +299,7 @@ class BIOS:
             with open(self.BIOS_SECUREUI_META_INST, "w+") as _config:
                 _config.write(str(_new_config).replace("'", '"'))
         except FileNotFoundError:
-            self.prnterr(SystemErrorCode(2))
+            self.prnterr(2)
             self.sui_generate_env()
     
 
@@ -308,8 +308,9 @@ class BIOS:
         try:
             with open(f"{_file}", "r") as _f:
                 _content = _f.read()
+
         except FileNotFoundError:
-            self.notification(f"fcontent: Couldn't locate: \"{_file}\", scope \"{self.BIOS_CONTAINER}\"", NFWarn)
+            self.notification(f"Could not fetch: \"{_file}\", scope \"{self.BIOS_CONTAINER}\"", NFWarn)
             return
         
         try:

@@ -1,5 +1,5 @@
 # System POST Logs
-_mount = []# is only emptied when the mount is flashed to scr
+_mount = []
 
 def mountvar(_var: str = None) -> None:
     if _var == None:
@@ -24,6 +24,7 @@ def flash() -> None:
         for _var in _mount:
             lg(_var)
         _mount.clear()
+        
     except Exception:
         return
     

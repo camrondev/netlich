@@ -1,5 +1,5 @@
 import _bios as _b
-import os
+import os, _boot
 NL      = _b.BIOS
 POST    = _b._post
 TO_POST = lambda _loadedvar: POST.mountvar(f"%{_loadedvar}")
@@ -42,6 +42,9 @@ class UserInterface(NL):
 
 
     def ui_getwidget(self, _widget_id: str = None):
+        """
+        Widget Functionality for the CLI.  #1.0.17.15.00.45
+        """
         if _widget_id == None:
             return
 
@@ -50,18 +53,6 @@ class UserInterface(NL):
 
     def ui_display_header(self) -> None:
         _           = self.ui_c_reset
-        _haddrcolor = self.sui_request_recvhaddrcolor()
-        _hosthidden = "visible"
-        _hnamecolor = "\033[90m"
-        match _haddrcolor:
-            case "\033[30m\033[4m":
-                _hosthidden = "invisible"
-                _hnamecolor = "\033[30m"
-            case _:
-                _hosthidden = "visible"
-                _hnamecolor = "\033[90m"
-
-
         _uidh_top = f" ╔╗╔ ╔═╗ ╔╦╗ \033[95m╦  ╦╔═╗╦ ╦ │{_}NLBuild {self.request_productversion()} © camrondev @" \
                                                     f"{self.ui_c_gray}fws --creator"
         _uidh_mid = f" ║║║ ║╣   ║  \033[95m║  ║║  ╠═╣ │{_}"
@@ -71,19 +62,21 @@ class UserInterface(NL):
 
 
     def ui_listen_uin(self):
-        os.system("pause")
+        #os.system("pause")
         os.system("cls")
         self.ui_display_header()
 
         _widget = self.ui_getwidget("network_status")
-        _direct = ...
-
-        self.prnt(f"{self.ui_s_botRi}{self.ui_c_lightpurple}netlich{self.ui_c_lightblue}({self.ui_c_green}{_direct}{self.ui_c_lightblue}){_widget}")
-        _uin = str(input(f"{self.ui_s_topRi}{self.input_color}"))
+        _direct = "Unavailable"
         
+        self.prnt(f"{self.ui_s_botRi}{self.ui_c_lightpurple}netlich{self.ui_c_lightblue}({self.ui_c_green}{_direct}{self.ui_c_lightblue}) {_widget}")
+        _uin = str(input(f"{self.ui_s_topRi}{self.input_color}"))
+
+        _boot.__revive__(f"{self.BIOS_CONTAINER}\\_ui.py")
 
 
 UI = UserInterface()
+
 
 while True:
     UI.ui_listen_uin()
