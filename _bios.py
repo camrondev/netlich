@@ -332,6 +332,7 @@ class BIOS:
         try:
             with open(f"{_container}\\meta\\inst.json", "w+") as instance_config:
                 instance_config.write(str(self.BIOS_SECUREUI_INSTANCE_FORMAT).replace("'", "\""))
+                del instance_config
 
         except FileExistsError:
             pass

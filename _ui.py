@@ -57,8 +57,9 @@ class UserInterface(NL):
                                                     f"{self.ui_c_gray}fws --creator"
         _uidh_mid = f" ║║║ ║╣   ║  \033[95m║  ║║  ╠═╣ │{_}"
         _uidh_bot = f" ╝╚╝ ╚═╝  ╩  \033[95m╩═╝╩╚═╝╩ ╩ │{_}"
+        _uidh_abar= f" \033[30m\033[102m 0 widgets \033[42m││{_}"
 
-        self.prntlines({_uidh_top: "r", _uidh_mid: "r", _uidh_bot: "r"})
+        self.prntlines({_uidh_top: "r", _uidh_mid: "r", _uidh_bot: "r", _uidh_abar: "r"})
 
 
     def ui_listen_uin(self):
@@ -66,10 +67,10 @@ class UserInterface(NL):
         os.system("cls")
         self.ui_display_header()
 
-        _widget = self.ui_getwidget("network_status")
-        _direct = "Unavailable"
+        _widget = "No widgets."
+        _direct = self.BIOS_CONTAINER
         
-        self.prnt(f"{self.ui_s_botRi}{self.ui_c_lightpurple}netlich{self.ui_c_lightblue}({self.ui_c_green}{_direct}{self.ui_c_lightblue}) {_widget}")
+        self.prnt(f"{self.ui_s_botRi}{self.ui_c_lightpurple}netlich{self.ui_c_lightblue}({self.ui_c_green}{_direct}{self.ui_c_lightblue}){self.ui_c_reset}─{_widget}")
         _uin = str(input(f"{self.ui_s_topRi}{self.input_color}"))
 
         _boot.__revive__(f"{self.BIOS_CONTAINER}\\_ui.py")
