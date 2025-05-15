@@ -13,7 +13,8 @@ class UserInterface(NL):
         self.access      = self.request_useracslev("rw");   TO_POST("access")
         self.access_n_1  = self.access[1];                  TO_POST("access_n_1")
         self.local_netty = False;                           TO_POST("local_netty")
-        self.widget_bar  = []
+        self.widget_bar  = str();                           TO_POST("widget_bar")
+        self.wid_con_src = 0;                               TO_POST("wid_con_src")
 
         if _source == None:
             _source = list(self.BIOS_SECUREUI_INSTANCE_FORMAT.keys())[0]
@@ -41,14 +42,21 @@ class UserInterface(NL):
         self.prnt("\033[32mApplication successfully loaded.")  # POST/LOG Endpoint, User-accessible UI after this point.
 
 
-    def ui_getwidget(self, _widget_id: str = None):
+    def ui_widget(self, _wid_content: list = None) -> str:
         """
         Widget Functionality for the CLI.  #1.0.17.15.00.45
         """
-        if _widget_id == None:
-            return
+        if not self.widget_bar:
+            self.widget_bar = str()
+        if _wid_content == None:
+            self.widget_bar = "No widgets."
+            return self.widget_bar
+        
+        for id in _wid_content:
+            self.widget_bar  = f"{self.BIOS_LISTWIDGET_ID[id]} {self.ui_c_lightblue}:{self.ui_c_reset} "
+            self.wid_con_src += 1
 
-        return self.BIOS_LISTWIDGET_ID[_widget_id]
+        return self.widget_bar
 
 
     def ui_display_header(self) -> None:
@@ -57,7 +65,7 @@ class UserInterface(NL):
                                                     f"{self.ui_c_gray}fws --creator"
         _uidh_mid = f" ║║║ ║╣   ║  \033[95m║  ║║  ╠═╣ │{_}"
         _uidh_bot = f" ╝╚╝ ╚═╝  ╩  \033[95m╩═╝╩╚═╝╩ ╩ │{_}"
-        _uidh_abar= f" \033[30m\033[102m 0 widgets \033[42m││{_}"
+        _uidh_abar= f" \033[30m\033[102m {len(self.widget_bar.split(":"))} WGT \033[42m║{_}"
 
         self.prntlines({_uidh_top: "r", _uidh_mid: "r", _uidh_bot: "r", _uidh_abar: "r"})
 
@@ -67,10 +75,9 @@ class UserInterface(NL):
         os.system("cls")
         self.ui_display_header()
 
-        _widget = "No widgets."
         _direct = self.BIOS_CONTAINER
-        
-        self.prnt(f"{self.ui_s_botRi}{self.ui_c_lightpurple}netlich{self.ui_c_lightblue}({self.ui_c_green}{_direct}{self.ui_c_lightblue}){self.ui_c_reset}─{_widget}")
+        _widget = ["network_status"]
+        self.prnt(f"{self.ui_s_botRi}{self.ui_c_lightpurple}netlich{self.ui_c_lightblue}({self.ui_c_green}{_direct}{self.ui_c_lightblue}){self.ui_c_reset}─{self.ui_widget(_widget)}")
         _uin = str(input(f"{self.ui_s_topRi}{self.input_color}"))
 
         _boot.__revive__(f"{self.BIOS_CONTAINER}\\_ui.py")
