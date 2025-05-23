@@ -1,5 +1,17 @@
-import _bios as _b
-import os, _boot
+try:
+    import sys
+    import _bios as _b
+    import os, _boot
+except (ModuleNotFoundError or Exception) as e:
+    _ = "LD SYS \033[31mCRITICAL FAILURE\033[0m"
+    __= "LD \033[94mTB \033[91mmissing required: %s\033[0m" % e
+    _a= "LD STOP. \033[91mmissing BIOS."
+    os.system(f"echo {_}")
+    os.system(f"echo {__}")
+    if e == "No module named '_bios'":
+        os.system(f"echo {_a}")
+        os.system("pause")
+        sys.exit()
 NL      = _b.BIOS
 POST    = _b._post
 TO_POST = lambda _loadedvar: POST.mountvar(f"%{_loadedvar}")
@@ -53,7 +65,7 @@ class UserInterface(NL):
             return self.widget_bar
         
         for id in _wid_content:
-            self.widget_bar  = f"{self.BIOS_LISTWIDGET_ID[id]} {self.ui_c_lightblue}:{self.ui_c_reset} "
+            self.widget_bar  = f"{self.BIOS_LISTWIDGET_ID[id]}{self.ui_c_lightblue}┐{self.ui_c_reset} "
             self.wid_con_src += 1
 
         return self.widget_bar
@@ -71,7 +83,7 @@ class UserInterface(NL):
 
 
     def ui_listen_uin(self):
-        #os.system("pause")
+        os.system("pause")
         os.system("cls")
         self.ui_display_header()
 

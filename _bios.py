@@ -70,7 +70,7 @@ class BIOS:
             self.BIOS_LOADBSHCC[_color];                                                    TO_POST("BIOS_BSHCC")
         
         self.BIOS_LISTWIDGET_ID = \
-            {"network_status": self.request_netty()};                                       TO_POST("BIOS_LISTWIDGET_ID")
+            {"network_status": f"NET {self.request_netty()}"};TO_POST("BIOS_LISTWIDGET_ID")
         
         self.BIOS_LISTNOTIFICATION_TYPE = \
             {NFInfo: f"{self.BIOS_BSHCC("lblue")}(?)",
